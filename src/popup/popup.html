@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Personal Autocorrect</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Personal Autocorrect</h1>
+      <label class="switch">
+        <input type="checkbox" id="enabled" aria-label="Autocorrect enabled" />
+        <span>On</span>
+      </label>
+    </header>
+
+    <!-- State is carried by text and a shape, never by colour alone. -->
+    <section
+      class="status"
+      id="status-block"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <span class="dot" id="status-dot" aria-hidden="true"></span>
+      <div class="status-text">
+        <b id="status-label">Loading</b>
+        <span class="detail" id="status-detail"></span>
+      </div>
+    </section>
+
+    <section id="site-block" class="block">
+      <div class="site" id="site"></div>
+      <div class="detail" id="site-detail"></div>
+      <button id="grant" class="primary" hidden type="button">Enable on this site</button>
+    </section>
+
+    <section class="block facts" id="facts-block">
+      <dl>
+        <div class="fact">
+          <dt>Corrections this session</dt>
+          <dd id="fact-corrections">0</dd>
+        </div>
+        <div class="fact">
+          <dt>Awaiting review</dt>
+          <dd id="fact-pending">0</dd>
+        </div>
+        <div class="fact">
+          <dt>History</dt>
+          <dd id="fact-history">-</dd>
+        </div>
+        <div class="fact">
+          <dt>Writing profile</dt>
+          <dd id="fact-profile">-</dd>
+        </div>
+        <div class="fact">
+          <dt>Grammar engine</dt>
+          <dd id="fact-harper">-</dd>
+        </div>
+        <div class="fact">
+          <dt>AI provider</dt>
+          <dd id="fact-ai">-</dd>
+        </div>
+      </dl>
+      <p class="shadow-note" id="shadow-note" hidden></p>
+    </section>
+
+    <section class="block" aria-labelledby="pause-heading">
+      <h2 id="pause-heading">Pause</h2>
+      <div class="row" id="pause-row">
+        <button id="pause-5" type="button">5 minutes</button>
+        <button id="pause-30" type="button">30 minutes</button>
+        <button id="pause-tab" type="button">Until tab closes</button>
+      </div>
+      <button id="resume" class="primary" type="button" hidden>Resume now</button>
+    </section>
+
+    <section class="block" aria-labelledby="turn-off-heading">
+      <h2 id="turn-off-heading">Turn off</h2>
+      <div class="row">
+        <button id="disable-field" type="button">For this field</button>
+        <button id="disable-site" type="button">For this website</button>
+      </div>
+    </section>
+
+    <section class="block actions">
+      <button id="open-panel" class="primary" type="button">Open correction history</button>
+      <button id="start-review" type="button">Start review</button>
+      <button id="options" type="button">Settings</button>
+      <button id="diagnostics" type="button">Diagnostics</button>
+    </section>
+
+    <footer id="status" role="status" aria-live="polite" aria-atomic="true"></footer>
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

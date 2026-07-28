@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Personal Autocorrect settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="page">
+      <h1>Personal Autocorrect</h1>
+      <p class="lede">
+        Everything runs on this device. No text is sent anywhere, and there is no cloud or AI
+        component in this build.
+      </p>
+
+      <section id="welcome" hidden>
+        <h2>Getting started</h2>
+        <ol>
+          <li>Open a page with a text box.</li>
+          <li>Click the extension icon and choose <b>Enable on this site</b>.</li>
+          <li>Type <code>waht </code> — it becomes <code>what</code>.</li>
+          <li>Open the correction panel to review, revert, and teach it.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Writing profile</h2>
+        <p class="hint">
+          A profile is a named set of thresholds and rule modes suited to one kind of
+          writing. Choosing one is an explicit decision, so it overrides the sliders below.
+        </p>
+        <label class="row">
+          <span>Default profile</span>
+          <select id="profile-select" data-setting="profile"></select>
+        </label>
+        <p class="hint" id="profile-description"></p>
+
+        <h3>Per-website profiles</h3>
+        <div class="list" id="site-profile-list"></div>
+        <div class="row inline">
+          <label class="sr-only" for="site-profile-origin">Website origin</label>
+          <input type="text" id="site-profile-origin" placeholder="https://example.com" />
+          <label class="sr-only" for="site-profile-value">Profile for this website</label>
+          <select id="site-profile-value"></select>
+          <button type="button" id="site-profile-add">Assign</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Rule controls</h2>
+        <p class="hint">
+          Every rule can run automatically, only offer a suggestion, or be switched off.
+          These override the profile. “Default” means the setting elsewhere on this page
+          decides.
+        </p>
+        <div id="rule-controls"></div>
+      </section>
+
+      <section>
+        <h2>Shadow mode</h2>
+        <p class="hint">
+          In shadow mode providers analyse your text and record what they <em>would</em> have
+          done, without changing anything. Use it to judge a rule before trusting it.
+        </p>
+        <label class="row">
+          <span>Mode</span>
+          <select data-setting="shadowMode">
+            <option value="off">Off — corrections apply normally</option>
+            <option value="experimental">Experimental rules only</option>
+            <option value="all">Everything — nothing is applied</option>
+          </select>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="shadowPersist" />
+          <span>Keep observations after the browser restarts (off by default)</span>
+        </label>
+        <div class="row inline">
+          <button type="button" id="shadow-refresh">Show observations</button>
+          <button type="button" id="shadow-clear" class="danger">Clear observations</button>
+        </div>
+        <div id="shadow-summary" class="hint" role="status" aria-live="polite"></div>
+        <div class="list" id="shadow-list"></div>
+      </section>
+
+      <section>
+        <h2>Personal vocabulary</h2>
+        <p class="hint">
+          Words, names, phrases and replacements you have decided about. Each entry has a
+          scope, so “leave this alone here” never becomes “leave this alone everywhere”.
+        </p>
+        <div class="row inline">
+          <label class="sr-only" for="vocab-kind">Entry type</label>
+          <select id="vocab-kind">
+            <option value="allowed-word">Allowed word</option>
+            <option value="name">Name or proper noun</option>
+            <option value="capitalisation">Preferred capitalisation</option>
+            <option value="preferred">Preferred correction</option>
+            <option value="blocked">Blocked correction</option>
+            <option value="phrase">Allowed phrase</option>
+          </select>
+          <label class="sr-only" for="vocab-original">Word or phrase</label>
+          <input type="text" id="vocab-original" placeholder="word or phrase" />
+          <label class="sr-only" for="vocab-replacement">Replacement</label>
+          <input type="text" id="vocab-replacement" placeholder="replacement (if needed)" />
+          <label class="sr-only" for="vocab-scope">Scope</label>
+          <select id="vocab-scope">
+            <option value="global">Everywhere</option>
+            <option value="site">One website…</option>
+          </select>
+          <label class="sr-only" for="vocab-origin">Website origin</label>
+          <input type="text" id="vocab-origin" placeholder="https://example.com" hidden />
+          <button type="button" id="vocab-add">Add</button>
+        </div>
+        <div class="row inline">
+          <button type="button" id="vocab-export">Export vocabulary</button>
+          <button type="button" id="vocab-import">Import vocabulary</button>
+          <input type="file" id="vocab-file" accept="application/json,.json" hidden />
+        </div>
+        <div class="list" id="vocab-list"></div>
+      </section>
+
+      <section>
+        <h2>Appearance &amp; accessibility</h2>
+        <label class="row">
+          <span>Theme</span>
+          <select data-setting="theme">
+            <option value="system">Follow the system</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="high-contrast">High contrast</option>
+          </select>
+        </label>
+        <label class="row">
+          <span>Motion</span>
+          <select data-setting="motion">
+            <option value="system">Follow the system setting</option>
+            <option value="reduce">Always reduce motion</option>
+          </select>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="showCorrectionExplanations" />
+          <span>Explain each automatic correction in the undo badge</span>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="markupOverlayEnabled" />
+          <span>Show every correction in the text by default (struck-through → replacement)</span>
+        </label>
+        <label class="row">
+          <span>History display</span>
+          <select data-setting="historyDisplayMode">
+            <option value="detailed">Detailed</option>
+            <option value="compact">Compact</option>
+          </select>
+        </label>
+        <label class="row">
+          <span>Group history by</span>
+          <select data-setting="historyGrouping">
+            <option value="none">Nothing</option>
+            <option value="site">Website</option>
+            <option value="field">Field</option>
+            <option value="paragraph">Paragraph</option>
+            <option value="time">Time</option>
+          </select>
+        </label>
+      </section>
+
+      <section>
+        <h2>Diagnostics</h2>
+        <p class="hint">
+          A private status page for this device. It contains no text you have typed.
+        </p>
+        <div class="row inline">
+          <button type="button" id="open-diagnostics">Open diagnostics</button>
+          <button type="button" id="open-self-test">Open self-test</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Corrections</h2>
+        <label class="row"><input type="checkbox" data-setting="enabled" /> <span>Autocorrect enabled</span></label>
+        <label class="row"><input type="checkbox" data-setting="contextualEnabled" /> <span>Contextual corrections for real words (<code>form</code> → <code>from</code>)</span></label>
+        <label class="row"><input type="checkbox" data-setting="contextualAutocorrect" /> <span>Let contextual corrections apply automatically once learned (otherwise suggestion only)</span></label>
+        <label class="row"><input type="checkbox" data-setting="grammarEnabled" /> <span>Local grammar rules (<code>a</code>/<code>an</code>)</span></label>
+        <label class="row"><input type="checkbox" data-setting="showInlineFlash" /> <span>Flash the corrected word briefly</span></label>
+        <label class="row"><input type="checkbox" data-setting="showSuggestionChips" /> <span>Offer medium-confidence corrections as a suggestion chip</span></label>
+
+        <label class="row range">
+          <span>Auto-correct above <b id="autocorrect-value"></b></span>
+          <input type="range" min="0.6" max="0.99" step="0.01" data-setting="autocorrectThreshold" />
+        </label>
+        <label class="row range">
+          <span>Suggest above <b id="suggestion-value"></b></span>
+          <input type="range" min="0.4" max="0.95" step="0.01" data-setting="suggestionThreshold" />
+        </label>
+      </section>
+
+      <section>
+        <h2>Essential punctuation</h2>
+        <p class="hint">
+          A deterministic, offline rule engine that inserts punctuation only
+          when sentence structure makes it unambiguous. It runs when you pause
+          typing, never on every keystroke, and every change is reversible from
+          the correction panel.
+        </p>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationEnabled" />
+          <span>Essential punctuation engine</span>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationAutomatic" />
+          <span>Apply high-confidence punctuation automatically (otherwise suggest)</span>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationOxfordComma" />
+          <span>Oxford comma (<code>apples, oranges, and pears</code>)</span>
+        </label>
+
+        <p class="hint">Individual rules:</p>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationIntroductoryClause" />
+          <span>Introductory clauses and phrases — <code>Although it rained<b>,</b> we continued.</code></span>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationIndependentClause" />
+          <span>Two joined clauses — <code>I was tired<b>,</b> but I kept working.</code></span>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationDirectAddress" />
+          <span>Direct address — <code>Let's eat<b>,</b> Grandma.</code></span>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationSimpleList" />
+          <span>Simple lists — <code>bread<b>,</b> milk<b>,</b> and eggs</code></span>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationNonrestrictiveClause" />
+          <span>
+            Possible non-essential clauses — <code>My brother<b>,</b> who lives in London<b>,</b> is a doctor.</code>
+            <em>(suggestion only: the commas change the meaning)</em>
+          </span>
+        </label>
+
+        <label class="row range">
+          <span>Suggest above <b id="punctuation-suggestion-value"></b></span>
+          <input type="range" min="0.5" max="0.95" step="0.01" data-setting="punctuationSuggestionThreshold" />
+        </label>
+        <label class="row range">
+          <span>Apply automatically above <b id="punctuation-automatic-value"></b></span>
+          <input type="range" min="0.9" max="1" step="0.01" data-setting="punctuationAutomaticThreshold" />
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationShowExplanations" />
+          <span>Show rule explanations in the correction panel</span>
+        </label>
+        <label class="row">
+          <input type="checkbox" data-setting="punctuationAllowRulePromotion" />
+          <span>Allow rules you consistently accept to become automatic</span>
+        </label>
+
+        <div id="punctuation-stats-block" hidden>
+          <p class="hint">Your decisions per punctuation rule:</p>
+          <table class="rules">
+            <thead>
+              <tr><th>Rule</th><th>Shown</th><th>Accepted</th><th>Rejected</th><th>Reverted</th></tr>
+            </thead>
+            <tbody id="punctuation-stats"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Harper grammar engine</h2>
+        <label class="row">
+          <input type="checkbox" data-setting="harperEnabled" />
+          <span>Enable the bundled Harper grammar checker (suggestion-only, fully offline)</span>
+        </label>
+        <p class="hint">
+          Harper is an ~18&nbsp;MB WebAssembly engine that runs entirely inside the
+          extension. Findings appear as suggestion chips after you pause typing —
+          it never rewrites text automatically and never runs on the keystroke path.
+          Its spelling checks are suppressed; the built-in spelling engine owns those.
+        </p>
+        <label class="row">
+          <input type="checkbox" data-setting="harperAutoApply" />
+          <span>Apply Harper findings automatically when I stop typing (instead of asking)</span>
+        </label>
+        <p class="hint">
+          Each automatic fix shows a fading before/after badge with an
+          <b>Undo</b> button, and is recorded in the correction panel like any
+          other change. Subjective rules (style and readability), rules measured
+          as unreliable, and any rule you have reverted twice without keeping it
+          stay suggestion-only even with this on.
+        </p>
+        <label class="row number">
+          <span>English dialect</span>
+          <select id="harper-dialect">
+            <option value="american">American</option>
+            <option value="british">British</option>
+            <option value="australian">Australian</option>
+            <option value="canadian">Canadian</option>
+            <option value="indian">Indian</option>
+          </select>
+        </label>
+        <p class="hint" id="harper-status-line" role="status" aria-live="polite"></p>
+        <div id="harper-disabled-block" hidden>
+          <p class="hint">Rules you turned off with “never apply this rule”:</p>
+          <ul class="chips" id="harper-disabled-rules" aria-label="Disabled Harper rules"></ul>
+        </div>
+        <div id="harper-stats-block" hidden>
+          <p class="hint">Your decisions per rule (groundwork for promoting reliable rules later):</p>
+          <table class="rules">
+            <thead>
+              <tr><th>Rule</th><th>Offered</th><th>Accepted</th><th>Rejected</th></tr>
+            </thead>
+            <tbody id="harper-stats"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Learning</h2>
+        <label class="row"><input type="checkbox" data-setting="learnFromDecisions" /> <span>Learn from what I accept and reject</span></label>
+        <label class="row"><input type="checkbox" data-setting="learnFromManualEdits" /> <span>Learn from repeated manual corrections</span></label>
+        <label class="row number">
+          <span>Repeats before a personal rule is created</span>
+          <input type="number" min="2" max="10" data-setting="manualEditEvidence" />
+        </label>
+      </section>
+
+      <section>
+        <h2>Privacy &amp; history</h2>
+        <label class="row number">
+          <span>Characters of surrounding text stored per correction (0 = none)</span>
+          <input type="number" min="0" max="120" step="4" data-setting="contextRadius" />
+        </label>
+        <p class="hint">
+          This context is what makes “jump to correction” and safe reverting work. With 0, no
+          surrounding context or per-correction fingerprint is stored; relocation relies on
+          position and occurrence order, which is less reliable after heavy editing.
+        </p>
+        <label class="row"><input type="checkbox" data-setting="storePageUrl" /> <span>Store the page URL and title with each session</span></label>
+        <label class="row"><input type="checkbox" data-setting="persistSessions" /> <span>Keep correction sessions across page reloads</span></label>
+        <label class="row number">
+          <span>Delete sessions after (days, 0 = never)</span>
+          <input type="number" min="0" max="365" data-setting="sessionRetentionDays" />
+        </label>
+        <label class="row number">
+          <span>Auto-accept pending corrections after (minutes, 0 = never)</span>
+          <input type="number" min="0" max="1440" data-setting="autoAcceptAfterMinutes" />
+        </label>
+        <label class="row"><input type="checkbox" data-setting="hideAcceptedFromList" /> <span>Hide accepted corrections from the panel list</span></label>
+
+        <label class="row column">
+          <span>Never store history for these origins (one per line)</span>
+          <textarea rows="3" data-setting="memoryOnlyOrigins" placeholder="https://bank.example.com"></textarea>
+        </label>
+        <label class="row column">
+          <span>Never correct on these hostnames (one per line)</span>
+          <textarea rows="3" data-setting="denylist" placeholder="docs.internal.example"></textarea>
+        </label>
+      </section>
+
+      <section>
+        <h2>Site access</h2>
+        <p class="hint">The extension only runs where you allow it. Remove access at any time.</p>
+        <ul class="chips" id="origins" aria-label="Sites with extension access"></ul>
+      </section>
+
+      <section>
+        <h2>Personal dictionary</h2>
+        <form id="dictionary-form" class="inline">
+          <label class="sr-only" for="dictionary-input">Word to never correct</label>
+          <input type="text" id="dictionary-input" placeholder="Word to never correct" />
+          <button type="submit">Add</button>
+        </form>
+        <ul class="chips" id="dictionary" aria-label="Personal dictionary words"></ul>
+      </section>
+
+      <section>
+        <h2>Replacement rules</h2>
+        <form id="rule-form" class="inline">
+          <label class="sr-only" for="rule-original">Text I type</label>
+          <input type="text" id="rule-original" placeholder="typed" />
+          <span aria-hidden="true">→</span>
+          <label class="sr-only" for="rule-replacement">Replacement text</label>
+          <input type="text" id="rule-replacement" placeholder="corrected" />
+          <button type="submit">Create rule</button>
+        </form>
+        <div class="table-scroll" role="region" aria-label="Replacement rules" tabindex="0">
+          <table class="rules">
+            <caption class="sr-only">Learned and custom replacement rules</caption>
+            <thead>
+              <tr>
+                <th scope="col">Correction</th><th scope="col">Mode</th>
+                <th scope="col">Applied</th><th scope="col">Kept</th>
+                <th scope="col">Reverted</th><th scope="col">Confidence</th>
+                <th scope="col">Source</th>
+                <th scope="col"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody id="rules"></tbody>
+          </table>
+        </div>
+        <p class="hint" id="rules-empty" role="status">No learned or custom rules yet.</p>
+      </section>
+
+      <section>
+        <h2>Learning candidates</h2>
+        <p class="hint">Repeated manual edits that have not yet become rules.</p>
+        <ul class="chips" id="pending" aria-label="Learning candidates"></ul>
+        <button type="button" id="clear-pending">Clear candidates</button>
+      </section>
+
+      <section>
+        <h2>Review shortcuts</h2>
+        <label class="row"><input type="checkbox" data-setting="shortcutsEnabled" /> <span>Enable keyboard shortcuts in the correction panel</span></label>
+        <div class="shortcuts" id="shortcuts"></div>
+        <p class="hint">Shortcuts work only inside the extension's side panel, never on the page.</p>
+      </section>
+
+      <section>
+        <h2>Your data</h2>
+        <div class="inline">
+          <button type="button" id="export">Export everything</button>
+          <button type="button" id="import" aria-describedby="import-warning">Import…</button>
+          <input type="file" id="import-file" accept="application/json" hidden />
+          <button type="button" id="clear-sessions">Delete all correction history</button>
+          <button type="button" id="reset" class="danger">Reset learned data</button>
+        </div>
+        <p class="hint" id="import-warning">
+          Import replaces settings, learned data, and correction history with the selected backup.
+        </p>
+        <p class="hint" id="data-summary" role="status" aria-live="polite"></p>
+      </section>
+
+      <p class="status" id="status" role="status" aria-live="polite" aria-atomic="true"></p>
+    </div>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

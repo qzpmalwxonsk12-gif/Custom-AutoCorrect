@@ -1,0 +1,39 @@
+{
+  "name": "personal-autocorrect",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Privacy-focused, offline personal autocorrect with a reviewable correction history (Chrome MV3).",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "generate:dictionary": "node scripts/generate-dictionary.mjs",
+    "generate:dictionary:check": "node scripts/generate-dictionary.mjs --check",
+    "build": "npm run generate:dictionary && node scripts/build.mjs",
+    "dev": "npm run generate:dictionary && node scripts/build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:harper": "vitest run --config vitest.harper.config.ts",
+    "benchmark": "node scripts/benchmark.mjs",
+    "benchmark:enforce": "node scripts/benchmark.mjs --enforce",
+    "demo": "node scripts/serve.mjs",
+    "check": "npm run check:encoding && npm run generate:dictionary:check && npm run generate:frequency:check && npm run generate:bigrams:check && npm run typecheck && npm run test && npm run build && npm run check:bundle",
+    "generate:frequency": "node scripts/generate-frequency.mjs",
+    "generate:frequency:check": "node scripts/generate-frequency.mjs --check",
+    "check:bundle": "node scripts/check-bundle-size.mjs",
+    "evaluate": "vitest run --config vitest.evaluation.config.ts",
+    "check:encoding": "node scripts/fix-encoding.mjs --check",
+    "generate:bigrams": "node scripts/generate-bigrams.mjs",
+    "generate:bigrams:check": "node scripts/generate-bigrams.mjs --check"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "esbuild": "^0.23.1",
+    "jsdom": "^24.1.1",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "dependencies": {
+    "harper.js": "^2.4.0"
+  }
+}

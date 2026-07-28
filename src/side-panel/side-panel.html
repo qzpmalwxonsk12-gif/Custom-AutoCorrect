@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Correction history</title>
+    <link rel="stylesheet" href="side-panel.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="doc">
+        <h1 class="field" id="field-label">No text field focused</h1>
+        <span class="site" id="site-label"></span>
+      </div>
+
+      <div class="counts" id="counts" role="status" aria-live="polite"></div>
+
+      <div class="toolbar" role="group" aria-label="Correction history actions">
+        <button id="btn-review" class="primary" type="button">Review corrections</button>
+        <button id="btn-accept-all" type="button">Keep all</button>
+        <button id="btn-revert-all-auto" type="button"
+          title="Undo every change made automatically, keeping ones you accepted">
+          Revert all automatic
+        </button>
+        <button id="btn-revert-selected" type="button" disabled>Revert selected</button>
+        <button id="btn-clear" type="button" title="Clear the history for this field">Clear</button>
+      </div>
+
+      <!-- The requested "show every mistake at once" view. -->
+      <div class="markup-row">
+        <label class="switch">
+          <input type="checkbox" id="toggle-markup" />
+          <span>Show all corrections in the text</span>
+        </label>
+        <span class="markup-hint" id="markup-hint" role="status" aria-live="polite"></span>
+      </div>
+
+      <div class="scan-row">
+        <button id="btn-scan" type="button" class="primary">Check whole text</button>
+        <label class="switch">
+          <input type="checkbox" id="toggle-deep-scan" />
+          <span>Keep checking in the background</span>
+        </label>
+        <label class="passes">
+          <span>Passes</span>
+          <input type="number" id="deep-scan-passes" min="1" max="10" step="1" />
+        </label>
+        <span class="scan-hint" id="scan-hint" role="status" aria-live="polite"></span>
+      </div>
+
+      <div class="switches">
+        <label class="switch">
+          <input type="checkbox" id="toggle-enabled" />
+          <span>Autocorrect</span>
+        </label>
+        <label class="switch">
+          <input type="checkbox" id="toggle-site" />
+          <span>On this site</span>
+        </label>
+        <span class="privacy" id="privacy-badge" role="status"></span>
+      </div>
+    </header>
+
+    <div class="review-bar" id="review-bar" hidden>
+      <span class="progress" id="review-progress" role="status" aria-live="polite"></span>
+      <div class="review-actions">
+        <button id="review-keep" type="button" class="primary">Keep</button>
+        <button id="review-revert" type="button">Revert</button>
+        <button id="review-skip" type="button">Skip</button>
+        <button id="review-prev" type="button" title="Previous" aria-label="Previous correction">◀</button>
+        <button id="review-next" type="button" title="Next" aria-label="Next correction">▶</button>
+        <button id="review-exit" type="button">Exit</button>
+      </div>
+      <div class="hint" id="review-hint"></div>
+    </div>
+
+    <div class="controls">
+      <label class="sr-only" for="search">Search corrections</label>
+      <input type="search" id="search" placeholder="Search original, replacement or context" />
+      <div class="view-row">
+        <label class="view-field">
+          <span>Group by</span>
+          <select id="grouping">
+            <option value="none">Nothing</option>
+            <option value="site">Website</option>
+            <option value="field">Field</option>
+            <option value="paragraph">Paragraph</option>
+            <option value="time">Time</option>
+          </select>
+        </label>
+        <label class="view-field">
+          <span>Display</span>
+          <select id="display-mode">
+            <option value="detailed">Detailed</option>
+            <option value="compact">Compact</option>
+          </select>
+        </label>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filter corrections"></div>
+    </div>
+
+    <main>
+      <div id="groups"></div>
+      <ul class="list" id="list" aria-label="Corrections in this field"></ul>
+      <div class="empty" id="empty" role="status">No corrections in this field yet.</div>
+      <div class="sentinel" id="sentinel"></div>
+    </main>
+
+    <footer class="status" id="status" role="status" aria-live="polite" aria-atomic="true"></footer>
+
+    <script type="module" src="side-panel.js"></script>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Personal Autocorrect diagnostics</title>
+    <link rel="stylesheet" href="diagnostics.css" />
+  </head>
+  <body>
+    <div class="page">
+      <h1>Diagnostics</h1>
+      <p class="lede">
+        A private status page for this device. It reports what is loaded and how it is
+        performing. <b>It contains no text you have typed</b> — only counts, versions,
+        durations and error messages.
+      </p>
+
+      <div class="row inline">
+        <button type="button" id="refresh" class="primary">Refresh</button>
+        <button type="button" id="copy">Copy as text</button>
+        <a class="button" href="self-test.html">Run the self-test</a>
+      </div>
+
+      <p class="status" id="status" role="status" aria-live="polite"></p>
+
+      <section aria-labelledby="h-build">
+        <h2 id="h-build">Build</h2>
+        <dl id="build"></dl>
+      </section>
+
+      <section aria-labelledby="h-dictionary">
+        <h2 id="h-dictionary">Dictionary</h2>
+        <dl id="dictionary"></dl>
+      </section>
+
+      <section aria-labelledby="h-harper">
+        <h2 id="h-harper">Harper grammar engine</h2>
+        <dl id="harper"></dl>
+      </section>
+
+      <section aria-labelledby="h-ai">
+        <h2 id="h-ai">AI provider</h2>
+        <dl id="ai"></dl>
+      </section>
+
+      <section aria-labelledby="h-site">
+        <h2 id="h-site">Active site and field</h2>
+        <dl id="site"></dl>
+      </section>
+
+      <section aria-labelledby="h-history">
+        <h2 id="h-history">History</h2>
+        <dl id="history"></dl>
+      </section>
+
+      <section aria-labelledby="h-performance">
+        <h2 id="h-performance">Performance and shadow mode</h2>
+        <dl id="performance"></dl>
+      </section>
+
+      <section aria-labelledby="h-errors">
+        <h2 id="h-errors">Provider errors</h2>
+        <p class="hint" id="errors-empty">No provider errors recorded.</p>
+        <table id="errors" hidden>
+          <thead>
+            <tr><th scope="col">When</th><th scope="col">Provider</th><th scope="col">Message</th></tr>
+          </thead>
+          <tbody id="errors-body"></tbody>
+        </table>
+      </section>
+    </div>
+    <script type="module" src="diagnostics.js"></script>
+  </body>
+</html>

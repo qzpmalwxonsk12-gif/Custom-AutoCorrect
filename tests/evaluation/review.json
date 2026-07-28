@@ -1,0 +1,29 @@
+{
+  "_comment": "Manual classification of apparent false positives on UD English EWT, keyed by sentenceId|token so the evaluation stays reproducible. Only 'Actual engine false positive' counts against the engine; every case still appears in the generated report, so nothing is silently excluded. See artifacts/context-evaluation/ud-apparent-false-positives.md.",
+  "_categories": [
+    "Actual engine false positive",
+    "Actual spelling error in UD EWT",
+    "Proper name",
+    "Dialect or regional spelling",
+    "Technical or domain term",
+    "Abbreviation",
+    "Tokenisation or reconstruction issue",
+    "Ambiguous"
+  ],
+
+  "weblog-blogspot.com_gettingpolitical_20030906235000_ENG_20030906_235000-0005|comme": "Actual spelling error in UD EWT",
+  "weblog-juancole.com_juancole_20040114085100_ENG_20040114_085100-0003|yound": "Actual spelling error in UD EWT",
+  "weblog-blogspot.com_marketview_20050210075500_ENG_20050210_075500-0001|miniscule": "Dialect or regional spelling",
+  "weblog-blogspot.com_tacitusproject_20040712123425_ENG_20040712_123425-0001|legnth": "Actual spelling error in UD EWT",
+  "weblog-typepad.com_ripples_20050410122300_ENG_20050410_122300-0016|annoucement": "Actual spelling error in UD EWT",
+  "weblog-typepad.com_ripples_20050410122300_ENG_20050410_122300-0029|commment": "Actual spelling error in UD EWT",
+  "weblog-typepad.com_ripples_20050410122300_ENG_20050410_122300-0029|Aquire": "Actual spelling error in UD EWT",
+  "weblog-typepad.com_ripples_20050410122300_ENG_20050410_122300-0037|mis": "Actual engine false positive",
+  "email-enronsent05_01-0004|auhtority": "Actual spelling error in UD EWT",
+  "email-enronsent05_01-0005|administartion": "Actual spelling error in UD EWT",
+  "email-enronsent23_14-0007|woodrows": "Proper name",
+  "email-enronsent23_14-0018|appetitie": "Actual spelling error in UD EWT",
+  "email-enronsent28_03-0005|counterparty": "Technical or domain term",
+  "email-enronsent01_01-0029|o'neal": "Actual engine false positive",
+  "email-enronsent30_02-0017|fisrt": "Actual spelling error in UD EWT"
+}

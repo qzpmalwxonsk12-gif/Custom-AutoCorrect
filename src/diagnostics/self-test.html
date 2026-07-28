@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Personal Autocorrect self-test</title>
+    <link rel="stylesheet" href="diagnostics.css" />
+  </head>
+  <body>
+    <div class="page">
+      <h1>Self-test</h1>
+      <p class="lede">
+        Runs the shipped engine against known inputs, inside this page, and reports what it
+        actually did. Nothing here talks to a server, and no result leaves this device.
+      </p>
+
+      <div class="row inline">
+        <button type="button" id="run" class="primary">Run all checks</button>
+        <a class="button" href="diagnostics.html">Back to diagnostics</a>
+      </div>
+
+      <p class="status" id="summary" role="status" aria-live="polite"></p>
+
+      <section aria-labelledby="h-results">
+        <h2 id="h-results">Results</h2>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Check</th>
+              <th scope="col">Area</th>
+              <th scope="col">Result</th>
+              <th scope="col">Detail</th>
+            </tr>
+          </thead>
+          <tbody id="results">
+            <tr><td colspan="4" class="hint">Not run yet.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Live fields the DOM checks drive. Kept visible so a failure can be
+           reproduced by hand immediately below the report. -->
+      <section aria-labelledby="h-fields">
+        <h2 id="h-fields">Live fields used by the checks</h2>
+        <p class="hint">
+          These are real editable fields. After a run you can type in them yourself to
+          confirm the behaviour the table reports.
+        </p>
+        <p><label>Input <input type="text" id="probe-input" /></label></p>
+        <p><label>Textarea <textarea id="probe-textarea" rows="3"></textarea></label></p>
+        <p>
+          Contenteditable
+          <span
+            class="editor"
+            id="probe-contenteditable"
+            contenteditable="true"
+            role="textbox"
+            aria-label="Self-test rich text field"
+          ></span>
+        </p>
+      </section>
+    </div>
+    <script type="module" src="self-test.js"></script>
+  </body>
+</html>

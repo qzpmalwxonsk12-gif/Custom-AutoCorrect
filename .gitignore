@@ -1,0 +1,16 @@
+node_modules/
+dist/
+*.log
+.DS_Store
+.qodo/
+
+# Development-only evaluation corpora. Large, read-only, never bundled:
+# vendor/evaluation is outside every esbuild entry point.
+vendor/evaluation/
+# Generated evaluation output.
+evaluation-output/
+
+# Third-party source archive, 95 MB. GitHub rejects files over 100 MB and this
+# is a downloadable artefact, not project source.
+languagetool-master.zip
+languagetool

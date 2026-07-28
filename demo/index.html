@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Personal Autocorrect — demo page</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        max-width: 780px; margin: 0 auto; padding: 32px 20px 80px;
+      }
+      h1 { font-size: 22px; margin-bottom: 4px; }
+      h2 { font-size: 16px; margin: 28px 0 6px; }
+      p.hint { color: #6b7280; margin: 4px 0 10px; }
+      textarea, input[type="text"], input[type="password"], .editor {
+        width: 100%; font: inherit; padding: 10px; border: 1px solid #cbd5e1;
+        border-radius: 8px; background: canvas; color: canvastext;
+      }
+      textarea { min-height: 150px; }
+      .editor { min-height: 110px; }
+      .row { display: flex; gap: 10px; flex-wrap: wrap; }
+      .row > * { flex: 1 1 240px; }
+      code { background: rgba(127,127,127,.16); padding: 1px 5px; border-radius: 4px; }
+      ol { padding-left: 20px; }
+      .note { border-left: 3px solid #2563eb; padding: 6px 0 6px 12px; margin: 16px 0; }
+      .test-grid {
+        overflow: hidden;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+      }
+      .test-row {
+        display: grid;
+        grid-template-columns: minmax(110px, .8fr) minmax(150px, 1fr) minmax(110px, .7fr);
+        gap: 1px;
+        background: #cbd5e1;
+      }
+      .test-row + .test-row { border-top: 1px solid #cbd5e1; }
+      .test-row > * {
+        min-width: 0;
+        margin: 0;
+        padding: 9px 10px;
+        background: canvas;
+      }
+      .test-grid strong { font-size: 13px; }
+      .test-word {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .outcome {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .corrected { background: #dcfce7; color: #166534; }
+      .suggested { background: #fef3c7; color: #92400e; }
+      .unchanged { background: #e5e7eb; color: #374151; }
+      @media (prefers-color-scheme: dark) {
+        .corrected { background: #14532d; color: #dcfce7; }
+        .suggested { background: #78350f; color: #fef3c7; }
+        .unchanged { background: #374151; color: #f3f4f6; }
+      }
+      @media (max-width: 560px) {
+        .test-row { grid-template-columns: minmax(90px, .7fr) minmax(130px, 1fr); }
+        .test-row > :nth-child(3) { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Personal Autocorrect — demo page</h1>
+    <p class="hint">
+      A local page for exercising the extension. Nothing here talks to a server.
+    </p>
+
+    <div class="note">
+      <b>Before anything works:</b> click the extension icon in the toolbar and
+      choose <b>Enable on this site</b>. The extension has no access to any page
+      until you do.
+    </div>
+
+    <h2>Idea Version 1 Dictionary Tests</h2>
+    <p class="hint">
+      Put the caret at the end of a test word and type a space. The last column
+      shows the conservative expected outcome with default settings; a
+      suggestion appears as a chip and does not rewrite the field.
+    </p>
+    <div class="test-grid" role="table" aria-label="Idea Version 1 dictionary tests">
+      <div class="test-row" role="row">
+        <strong role="columnheader">Type and add a space</strong>
+        <strong role="columnheader">Expected candidate/result</strong>
+        <strong role="columnheader">Outcome</strong>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="Try owrks" aria-label="Adjacent swap test owrks" /></div>
+        <div role="cell"><code>Try works</code></div>
+        <div role="cell"><span class="outcome corrected">corrected</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="Try eorks" aria-label="Keyboard proximity test eorks" /></div>
+        <div role="cell"><code>Try works</code></div>
+        <div role="cell"><span class="outcome corrected">corrected</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="Try nromal" aria-label="Adjacent swap test nromal" /></div>
+        <div role="cell"><code>Try normal</code></div>
+        <div role="cell"><span class="outcome corrected">corrected</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="Try prrompt" aria-label="Unsupported deletion test prrompt" /></div>
+        <div role="cell"><code>Try prrompt</code></div>
+        <div role="cell"><span class="outcome unchanged">unchanged</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="Try workflor" aria-label="Ambiguous spelling test workflor" /></div>
+        <div role="cell"><code>Try workflow</code></div>
+        <div role="cell"><span class="outcome suggested">suggested</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="Try alogrithm" aria-label="Adjacent swap test alogrithm" /></div>
+        <div role="cell"><code>Try algorithm</code></div>
+        <div role="cell"><span class="outcome corrected">corrected</span></div>
+      </div>
+    </div>
+    <p class="hint">
+      These labels are regression expectations, not live instrumentation. Use
+      the suggestion chip to accept a candidate; the correction panel shows
+      recorded correction types and confidence.
+    </p>
+
+    <h2>Advanced spelling and spacing</h2>
+    <p class="hint">
+      Put the caret at the end of a test phrase and type a space. Every change
+      listed here is recorded in the correction panel as one reversible entry —
+      open the panel and confirm the count rises by exactly one per correction.
+    </p>
+    <div class="test-grid" role="table" aria-label="Advanced spelling and spacing tests">
+      <div class="test-row" role="row">
+        <strong role="columnheader">Type and add a space</strong>
+        <strong role="columnheader">Expected result</strong>
+        <strong role="columnheader">Process</strong>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="the punctuatioon" aria-label="Duplicate letter test" /></div>
+        <div role="cell"><code>the punctuation</code></div>
+        <div role="cell"><span class="outcome corrected">duplicate letter</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="please iprove" aria-label="Missing letter test" /></div>
+        <div role="cell"><code>please improve</code></div>
+        <div role="cell"><span class="outcome suggested">missing letter</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="the impro vement" aria-label="Accidental space test" /></div>
+        <div role="cell"><code>the improvement</code></div>
+        <div role="cell"><span class="outcome corrected">token merge</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="the improvementability" aria-label="Missing space test" /></div>
+        <div role="cell"><code>the improvement ability</code></div>
+        <div role="cell"><span class="outcome corrected">token split</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="I will iprove" aria-label="Ranking test" /></div>
+        <div role="cell"><code>improve</code>, never <code>iphone</code></div>
+        <div role="cell"><span class="outcome suggested">operation cost</span></div>
+      </div>
+      <div class="test-row" role="row">
+        <div role="cell"><input class="test-word" type="text" value="I read a book" aria-label="Valid word test" /></div>
+        <div role="cell"><code>book</code> (unchanged)</div>
+        <div role="cell"><span class="outcome unchanged">valid word</span></div>
+      </div>
+    </div>
+    <p class="hint">
+      <b>“iprove” is offered rather than imposed on purpose.</b> It has two
+      equally simple readings — insert an <code>m</code> for “improve”, or drop
+      the <code>i</code> for “prove” — so the engine suggests instead of
+      choosing for you. Click the chip to apply it.
+    </p>
+    <div class="note">
+      <b>History check:</b> after running the rows above, open the correction
+      panel. You should see one entry per applied correction, each showing the
+      operation that produced it (duplicate letter, missing letter, joined
+      words, split words), and reverting any one of them must restore the exact
+      original text including its capitalisation.
+    </div>
+
+    <h2>1. Plain textarea — the main path</h2>
+    <p class="hint">
+      Type this, including the trailing space:
+      <code>I think waht happened becuase teh dog adn teh cat recieve oir food</code>
+    </p>
+    <textarea id="main" aria-label="Demo message body" placeholder="Type here…"></textarea>
+
+    <h2>2. A longer document, to test review and jump-to</h2>
+    <p class="hint">
+      This starts with text already in it. Add a few typos of your own near the
+      bottom, then open the panel and click an entry — it should scroll here and
+      highlight the word.
+    </p>
+    <textarea id="long" aria-label="Demo long document">
+The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the
+lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps
+over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown
+fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.
+
+Now try typing here: teh waht becuase
+    </textarea>
+
+    <h2>3. Things it must NOT correct</h2>
+    <p class="hint">
+      Type each of these with a trailing space. None should change:
+      <code>https://example.com/teh</code>, <code>teh@example.com</code>,
+      <code>getTeh()</code>, <code>`teh`</code>, <code>TEH</code>,
+      <code>teh2</code>
+    </p>
+    <textarea id="guards" aria-label="Demo safeguards field"></textarea>
+
+    <h2>4. contenteditable (rich-text host)</h2>
+    <p class="hint">Same behaviour, different plumbing. Type <code>waht </code>.</p>
+    <div class="editor" contenteditable="true" role="textbox" aria-label="Demo rich text editor">
+      <p>Type here: </p>
+    </div>
+
+    <h2>5. Fields it refuses to touch</h2>
+    <p class="hint">
+      Type <code>teh </code> in each. Nothing should be corrected, and nothing
+      should appear in the correction panel.
+    </p>
+    <div class="row">
+      <label>Password<br /><input type="password" autocomplete="current-password" /></label>
+      <label>Card number<br /><input type="text" autocomplete="cc-number" name="card_number" /></label>
+      <label>One-time code<br /><input type="text" autocomplete="one-time-code" name="otp" /></label>
+      <label>Search (allowed)<br /><input type="text" aria-label="Search" /></label>
+    </div>
+
+    <h2>6. Site opt-out attribute</h2>
+    <p class="hint">
+      A site can mark a region private. Typing <code>teh </code> here must do
+      nothing.
+    </p>
+    <div data-personal-autocorrect="off">
+      <textarea aria-label="Opted-out field"></textarea>
+    </div>
+
+    <h2>What to try in the panel</h2>
+    <ol>
+      <li>Click the icon → <b>Open correction panel</b>.</li>
+      <li>Click any entry — the page scrolls to it and highlights it, and a card
+        shows <code>waht → what</code>.</li>
+      <li><b>Reject &amp; revert</b> on one of two identical corrections; only
+        that occurrence should change back.</li>
+      <li><b>Review N corrections</b> → walk the queue with the arrow keys while
+        the panel has focus.</li>
+      <li>Revert something with <b>Never this replacement</b>, then type the same
+        typo again — it should stay uncorrected.</li>
+      <li>Reload the page. The history should still be there (unless you turned
+        persistence off in Settings).</li>
+    </ol>
+  </body>
+</html>
