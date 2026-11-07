@@ -1,5 +1,20 @@
 # Personal Autocorrect
 
+## Repository guide
+
+This is one application family with two platform integrations: the Chrome extension at the repository root and the Android app under [`android/`](android/README.md). Both implement local correction and review/history workflows; the Android integration uses an AccessibilityService instead of browser content scripts.
+
+| Platform | Start here | Build entry |
+|---|---|---|
+| Chrome | This guide and `manifest.json` | `npm ci` then `npm run build` |
+| Android | [Android guide](android/README.md) | `cd android` then `gradlew.bat assembleDebug` with a configured Android SDK/JDK |
+
+For Chrome, load the generated `dist/` directory as an unpacked extension and explicitly enable the sites you want. For Android, build/install locally, review accessibility permissions and select the apps the service may access. A working in-app engine demonstration does not establish that a particular external editor accepts text changes.
+
+The Android source was combined into the existing repository because the shared Chrome application files matched. Existing Chrome history was retained. Local training experiments and their additional package commands were not imported. `android/tools/generate-assets.mjs` reads the shared engine's language-data source when Android assets need regeneration.
+
+Use the detailed privacy, rejection, dictionary and compatibility explanations below before relying on automatic changes. Installed binaries, device data, signing keys and provider/account credentials are not distributed here.
+
 ## Chrome and Android in one repository
 
 The Chrome extension remains at the repository root. The Android application lives in [`android/`](android/README.md) and shares the correction engine language data through `android/tools/generate-assets.mjs`. Android has its own Gradle build and AccessibilityService integration. See its README for build and setup instructions.
@@ -233,3 +248,8 @@ state and permission revocation.
 The extension source is MIT. The bundled SCOWL-derived word data carries its
 own permissive copyright and attribution notice; see
 [docs/DICTIONARY.md](docs/DICTIONARY.md#copyright-and-permission-notice).
+
+
+## Source snapshot and validation
+
+Build generated binaries locally using the instructions above; a source checkout is not an installed application. Earlier validation figures in this guide describe their original development runs. This documentation update checks source references and instructions; it does not claim a fresh application, device or gameplay test.
