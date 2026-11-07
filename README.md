@@ -1,5 +1,11 @@
 # Personal Autocorrect
 
+## Chrome and Android in one repository
+
+The Chrome extension remains at the repository root. The Android application lives in [`android/`](android/README.md) and shares the correction engine language data through `android/tools/generate-assets.mjs`. Android has its own Gradle build and AccessibilityService integration. See its README for build and setup instructions.
+
+This consolidation adds the application source only. Local model-training experiments, research datasets, signing keys, device-local settings, and generated builds are not included.
+
 A fast, offline autocorrect for Chrome that keeps a **reviewable history of
 every change it makes**. Instead of relying on you catching a mistake in the
 moment, it records each correction, lets you jump back to it, and lets you

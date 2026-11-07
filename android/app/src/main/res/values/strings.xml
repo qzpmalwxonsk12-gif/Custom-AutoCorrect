@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Personal Autocorrect</string>
+    <string name="service_label">Personal Autocorrect</string>
+    <string name="service_description">Corrects typos as you type in the apps you choose, using a fully offline dictionary. Nothing is ever sent anywhere. Password, payment and one-time-code fields are excluded.</string>
+
+    <string name="status_on">Service running</string>
+    <string name="status_off">Service not enabled</string>
+    <string name="status_off_detail">Turn on \"Personal Autocorrect\" in Android\'s Accessibility settings, then choose which apps it may correct.</string>
+    <string name="open_accessibility_settings">Open Accessibility settings</string>
+
+    <string name="engine_loading">Loading dictionary…</string>
+
+    <string name="section_apps">Apps</string>
+    <string name="section_behaviour">Behaviour</string>
+    <string name="section_learning">Learning</string>
+    <string name="section_engine">Engine</string>
+    <string name="section_try">Try it</string>
+
+    <string name="choose_apps">Choose apps</string>
+    <string name="no_apps_chosen">No apps chosen — the service will not touch anything yet.</string>
+    <string name="apps_chosen">%1$d app(s) enabled</string>
+
+    <string name="view_history">Correction history</string>
+    <string name="pref_enabled">Autocorrect enabled</string>
+    <string name="pref_grammar">Fix a/an before words</string>
+    <string name="pref_contextual">Suggest real-word fixes (their/there)</string>
+    <string name="pref_learn">Learn from what I keep</string>
+    <string name="pref_vibrate">Vibrate on correction</string>
+    <string name="pref_toast">Show what changed</string>
+    <string name="pref_threshold">Autocorrect confidence: %1$d%%</string>
+    <string name="pref_threshold_hint">Higher means fewer, safer corrections.</string>
+
+    <string name="try_hint">Type here to test: \"I think waht happened\"</string>
+
+    <string name="history_empty">No corrections yet.</string>
+    <string name="history_title">Correction history</string>
+    <string name="revert">Revert</string>
+    <string name="clear_history">Clear history</string>
+    <string name="section_diagnostics">Diagnostics</string>
+    <string name="diagnostics_hint">Live view of what the service is doing. Type in another app, then come back here. If \"Try it\" corrects but a real app does not, the engine is fine and the problem is that app or the allowlist.</string>
+    <string name="clear_diagnostics">Clear</string>
+    <string name="diagnostics_empty">No events yet. The service has not seen a text field in any app.</string>
+    <string name="app_picker_title">Apps to correct in</string>
+    <string name="app_picker_hint">The service reads text only in the apps you tick here.</string>
+</resources>

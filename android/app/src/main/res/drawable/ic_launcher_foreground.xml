@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A tick over a baseline: "checked as you write". -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M38,60.5l-8.5,-8.5 -5.5,5.5 14,14 26,-26 -5.5,-5.5z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,78h48v5h-48z" />
+</vector>

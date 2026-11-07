@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Event set is deliberately narrow.
+
+  TYPE_VIEW_TEXT_CHANGED         - the only trigger for a correction pass.
+  TYPE_VIEW_TEXT_SELECTION_CHANGED - keeps the caret model honest when the user
+                                     taps elsewhere in the field.
+  TYPE_VIEW_FOCUSED / TYPE_WINDOW_STATE_CHANGED - session boundaries.
+
+  flagRetrieveInteractiveWindows is NOT set: we only ever need the node that
+  fired the event, never the whole window tree.
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeViewTextChanged|typeViewTextSelectionChanged|typeViewFocused|typeWindowStateChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags="flagDefault|flagReportViewIds|flagIncludeNotImportantViews"
+    android:canRetrieveWindowContent="true"
+    android:description="@string/service_description"
+    android:notificationTimeout="0"
+    android:settingsActivity="com.arjun.autocorrect.ui.MainActivity" />
