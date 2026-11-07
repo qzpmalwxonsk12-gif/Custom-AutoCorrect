@@ -1321,6 +1321,11 @@ export class EditableController {
       // text has already changed, so leaving now would produce exactly the
       // "changed but unrecorded" state this path exists to prevent.
       const restored = this.rollback(before);
+      if (!this.refreshEligibility()) {
+        this.session.persistence = 'memory';
+        this.snapshot = '';
+        return { status: 'unrecorded', reason: 'field-became-protected' };
+      }
       const afterRollback = this.adapter.getText();
       finalText = afterRollback;
       this.snapshot = afterRollback;
@@ -1404,6 +1409,11 @@ export class EditableController {
       // History construction failed: never leave modified text unrecorded.
       console.error('[autocorrect] could not build a correction record:', e);
       const restored = this.rollback(before);
+      if (!this.refreshEligibility()) {
+        this.session.persistence = 'memory';
+        this.snapshot = '';
+        return { status: 'unrecorded', reason: 'field-became-protected' };
+      }
       this.snapshot = this.adapter.getText();
       return {
         status: restored ? 'rolled-back' : 'unrecorded',
@@ -1472,12 +1482,13 @@ export class EditableController {
    * not predict, so span arithmetic can no longer be trusted.
    */
   private rollback(before: string): boolean {
+    if (!this.refreshEligibility()) return false;
     this.applying = true;
     try {
       const current = this.adapter.getText();
       if (current === before) return true;
       const undone = this.adapter.replaceRange(0, current.length, before);
-      if (!undone) return false;
+      if (!undone || !this.refreshEligibility()) return false;
       return this.adapter.getText() === before;
     } catch {
       return false;
@@ -2644,6 +2655,18 @@ export class EditableController {
       this.applying = false;
     }
 
+    // Host input handlers run synchronously and may turn this into a password
+    // or payment field. Recheck before every post-edit read, including rollback.
+    if (!this.refreshEligibility()) {
+      this.session.persistence = 'memory';
+      this.snapshot = '';
+      transition(record, 'unresolved', { failureReason: 'The field became protected during the edit.' });
+      delete record.lastKnownRange;
+      this.touchSession();
+      this.host.changed(this);
+      return err('The field became protected during the edit; no further text was read.');
+    }
+
     if (!applied) {
       transition(record, 'unresolved', {
         failureReason: 'The editor refused the edit, so nothing was changed.',
@@ -2663,6 +2686,15 @@ export class EditableController {
       // or normalise elsewhere in response to the same input event. Restore
       // the complete pre-revert state so a failed undo leaves no collateral.
       const restored = this.rollback(text);
+      if (!this.refreshEligibility()) {
+        this.session.persistence = 'memory';
+        this.snapshot = '';
+        transition(record, 'unresolved', { failureReason: 'The field became protected during rollback.' });
+        delete record.lastKnownRange;
+        this.touchSession();
+        this.host.changed(this);
+        return err('The field became protected during rollback; no further text was read.');
+      }
       const live = this.adapter.getText();
       this.snapshot = live;
       if (restored) {

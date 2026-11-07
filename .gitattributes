@@ -1,0 +1,6 @@
+# Keep generated text deterministic while preserving the provenance-checked vendored bytes.
+* text=auto eol=lf
+*.bat text eol=crlf
+/vendor/esdb/en_US.txt -text
+/vendor/frequency/en_common.txt -text
+/vendor/character-ngrams/en_bigrams.txt -text

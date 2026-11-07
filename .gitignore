@@ -14,3 +14,28 @@ evaluation-output/
 # is a downloadable artefact, not project source.
 languagetool-master.zip
 languagetool
+
+
+# Local secrets and private runtime data (source/security review)
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.pem
+*.key
+keystore.properties
+local.properties
+application_default_credentials.json
+credentials.json
+token.json
+tokens.json
+auth.json
+*.sqlite
+*.sqlite3
+*.db
+*.log

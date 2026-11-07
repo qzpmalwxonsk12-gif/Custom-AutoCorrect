@@ -343,3 +343,35 @@ describe('editor undo and redo', () => {
     expect(controller.session.records[0]!.status).toBe('pending');
   });
 });
+
+
+describe('revert privacy boundary', () => {
+  it('does not read or retain a field made sensitive by the revert input handler', () => {
+    const field = document.createElement('input');
+    field.type = 'text';
+    document.body.appendChild(field);
+    const host = makeHost();
+    const adapter = new InputAdapter(field);
+    const controller = new EditableController(adapter, host);
+    controller.attach();
+    controllers.push(controller);
+    typeInto(field, 'Type the punctuatioon ');
+    const record = controller.session.records[0]!;
+    let sensitiveReads = 0;
+    const originalRead = adapter.getText.bind(adapter);
+    vi.spyOn(adapter, 'getText').mockImplementation(() => {
+      if (field.type === 'password') sensitiveReads++;
+      return originalRead();
+    });
+    field.addEventListener('input', () => {
+      field.type = 'password';
+      field.value = 'private-after-revert-test-value';
+    }, { once: true });
+
+    controller.decide(record.id, 'revert');
+
+    expect(sensitiveReads).toBe(0);
+    expect(JSON.stringify(controller.session)).not.toContain('private-after-revert-test-value');
+    expect(JSON.stringify(host.events)).not.toContain('private-after-revert-test-value');
+  });
+});

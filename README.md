@@ -253,3 +253,9 @@ own permissive copyright and attribution notice; see
 ## Source snapshot and validation
 
 Build generated binaries locally using the instructions above; a source checkout is not an installed application. Earlier validation figures in this guide describe their original development runs. This documentation update checks source references and instructions; it does not claim a fresh application, device or gameplay test.
+
+### Development tool security update
+
+Use Node.js 22.12+ on the 22.x line, 24.x, or 26+. The test/build toolchain has been updated to patched versions, and the default test configuration separates Node and DOM suites using Vitest projects. Run `npm ci` after pulling the updated lockfile.
+
+Revert and rollback now recheck field eligibility after synchronous host input handlers before reading text. The audit includes a regression for a host changing a text field into a password field during revert.
